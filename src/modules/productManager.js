@@ -31,22 +31,41 @@ class ProductManager {
     getProd = async () => {
         return await this.readprod();
     }
+    // existe o no
+    prodexist = async (id) => {
+        let products = await this.readprod();
+        return products.find (prods => prods.id === id);
+    }
 
     getProdById = async (id) => {
-        let products = await this.readprod();
-        let productById = products.find (prods => prods.id === id);
+        let productById = await this.prodexist(id);
         if (!productById) {
             return ('producto no encontrado');
         }
         return productById;
     }
 
+    updateProds = async (id, product) => {
+        let productById = await this.prodexist(id);
+        if (!productById) {
+            return ('producto no encontrado');
+        }
+        await this.deleteProd (id);
+        let productsOld = await this.readprod();
+        let products = [{...product, id : id}, ...productsOld];
+        await this.writeProd (products);
+        return 'producto actualizado';
+    }
+
     deleteProd = async (id) => {
         let products = await this.readprod();
         let prodexiste = products.some (prods => prods.id === id);
         if (prodexiste) {
-            let filtrarprod = products.filter (prods => prods.id !== id)
+            let filtrarprod = products.filter (prods => prods.id !== id);
+            await this.writeProd (filtrarprod);
+            return 'producto eliminado';
         }
+        return 'El producto no estas disponible para eliminar';
     }
 }
 
