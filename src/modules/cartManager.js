@@ -49,12 +49,22 @@ class CartManager {
         if (!cartById) {
             return "Carrito no existe"
         }
-        let prodById = await totalProd.cartExist(prodId);
+        let prodById = await totalProd.prodexist(prodId);
         if (!cartById) {
             return "Producto no existe"
         }
         let totalCarts = await this.readCart();
-        let cartFilter = totalCarts.filter (prod => prod .id !== id)
+        let cartFilter = totalCarts.filter ((cart) => cart.id !== cartId)
+
+
+        if (cartById.products.some ((prod) => prod.id === prodId)) {
+            let prodInCart = cartById.products.find ((prod) => prod.id === prodId);
+            prodInCart.cantidad + 1
+            let cartAll = [prodInCart, ...cartFilter];
+            await this.writeCart (cartAll)
+            return 'Producto en carrito'
+        }
+        
         let cartsAll = [{id: cartId, products : [{id: prodById.id, cantidad: 1}]}, ...cartFilter];
         await this.writeCart(cartsAll);
         return 'Producto en carrito'
