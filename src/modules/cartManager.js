@@ -39,7 +39,7 @@ class CartManager {
     getCartById = async (id) => {
         let cartById = await this.cartExist(id);
         if (!cartById) {
-            return ('Carrito no encontrado');
+            return 'Carrito no encontrado';
         }
         return cartById;
     }

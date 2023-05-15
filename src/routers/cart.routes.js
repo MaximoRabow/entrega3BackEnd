@@ -14,8 +14,12 @@ cartRouter.get ("/:id", async (req, res)=> {
     res.send (await carts.getCartById(id));
 })
 
+cartRouter.post("/", async (req, res)=> {
+    res.send (await carts.addCarts());
+})
+
 // Mandamos producto nuevo
-cartRouter.post("/:cid/product/:pid", async (req, res)=> {
+cartRouter.post("/:cid/products/:pid", async (req, res)=> {
     let cartId = req.params.cid;
     let prodId = req.params.pid;
     res.send (await carts.addProductsCarts(cartId, prodId));
